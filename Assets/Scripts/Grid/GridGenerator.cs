@@ -35,6 +35,10 @@ public class GridGenerator : MonoBehaviour
     public int Width => mapRows[0].Length;
     public int Height => mapRows.Length;
 
+    public IReadOnlyDictionary<Vector2Int, bool> Walls => walls;
+    public IReadOnlyDictionary<Vector2Int, GameObject> Coins => coins;
+    public Vector2Int PlayerSpawnPoint => playerSpawnPoint;
+
     public void GenerateLevel()
     {
         ClearLevel();
@@ -88,12 +92,36 @@ public class GridGenerator : MonoBehaviour
         }
     }
 
-    private Vector3 GridToWorld(Vector2Int gridPos)
+    public Vector3 GridToWorld(Vector2Int gridPos)
     {
         return new Vector3 (
             gridPos.x * tileSize, 
             0f, 
             -gridPos.y * tileSize
         );
+    }
+
+    public bool IsInsideGrid(Vector2Int gridPos)
+    {
+        return gridPos.x >= 0 && gridPos.x < Width && gridPos.y >= 0 && gridPos.y < Height;
+    }
+
+    public bool IsWall(Vector2Int gridPos)
+    {
+        return walls.ContainsKey(gridPos) && walls[gridPos];
+    }
+
+    public bool HasCoin(Vector2Int gridPos)
+    {
+        return coins.ContainsKey(gridPos) && coins[gridPos] != null;
+    }
+
+    public void CollectCoin(Vector2Int gridPos)
+    {
+        if (HasCoin(gridPos))
+        {
+            Destroy(coins[gridPos]);
+            coins.Remove(gridPos);
+        }
     }
 }
