@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     public GridGenerator gridGenerator;
     public UIManager uiManager;
+    public AudioManager audioManager;
 
     private PlayerController player;
     private int totalCoins;
@@ -44,6 +45,11 @@ public class GameManager : MonoBehaviour
 
     public void HandlePlayerSteppedOnTile(Vector2Int gridPos)
     {
+        if (audioManager != null)
+        {
+            audioManager.PlayStep();
+        }
+
         if (gridGenerator.HasCoin(gridPos))
         {
             gridGenerator.CollectCoin(gridPos);
@@ -51,10 +57,20 @@ public class GameManager : MonoBehaviour
 
             uiManager.SetCoinText(collectedCoins, totalCoins);
 
+            if (audioManager != null)
+            {
+                audioManager.PlayCoin();
+            }
+
             if (collectedCoins == totalCoins)
             {
                 IsGameWon = true;
                 uiManager.ShowWinMessage(true);
+
+                if (audioManager != null)
+                {
+                    audioManager.PlayWin();
+                }
             }
         }
     }
