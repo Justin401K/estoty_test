@@ -16,41 +16,92 @@ public class GridGenerator : MonoBehaviour
     public Transform environmentParent;
     public Transform coinsParent;
 
-    private readonly string[] mapRows =
+    private readonly string[][] levels =
     {
-        "WWWWWWWW",
-        "WPFFFCFW",
-        "WFWFWWFW",
-        "WFCFFWFW",
-        "WFWWFFCW",
-        "WFWFFWFW",
-        "WCFFFFFW",
-        "WWWWWWWW"
+        new string[]
+        {
+            "WWWWWWWW",
+            "WPFFFCFW",
+            "WFWFWWFW",
+            "WFCFFWFW",
+            "WFWWFFCW",
+            "WFWFFWFW",
+            "WCFFFFFW",
+            "WWWWWWWW"
+        },
+        new string[]
+        {
+            "WWWWWWWW",
+            "WPFWFFCW",
+            "WFWFWWFW",
+            "WFFCFWFW",
+            "WCWWFFFW",
+            "WFFFWFCW",
+            "WCFWFFFW",
+            "WWWWWWWW"
+        },
+        new string[]
+        {
+            "WWWWWWWW",
+            "WPFCFFFW",
+            "WWFWFWFW",
+            "WFFWFCFW",
+            "WCFWFFWW",
+            "WFFFCFFW",
+            "WFWFWCFW",
+            "WWWWWWWW"
+        },
+        new string[]
+        {
+            "WWWWWWWW",
+            "WPFFFFCW",
+            "WFWCWWFW",
+            "WCFFFWFW",
+            "WFWWWFFW",
+            "WFFCFWFW",
+            "WCFWFFFW",
+            "WWWWWWWW"
+        },
+        new string[]
+        {
+            "WWWWWWWW",
+            "WPFWCFFW",
+            "WFFWFWCW",
+            "WWFCFWFW",
+            "WCFFWWFW",
+            "WFWCFFFW",
+            "WFFFWCFW",
+            "WWWWWWWW"
+        }
     };
 
     private Dictionary<Vector2Int, bool> walls = new Dictionary<Vector2Int, bool>();
     private Dictionary<Vector2Int, GameObject> coins = new Dictionary<Vector2Int, GameObject>();
     private Vector2Int playerSpawnPoint;
+    private string[] currentMapRows;
 
-    public int Width => mapRows[0].Length;
-    public int Height => mapRows.Length;
+    public int Width => currentMapRows[0].Length;
+    public int Height => currentMapRows.Length;
 
     public IReadOnlyDictionary<Vector2Int, bool> Walls => walls;
     public IReadOnlyDictionary<Vector2Int, GameObject> Coins => coins;
     public Vector2Int PlayerSpawnPoint => playerSpawnPoint;
+    public int LevelCount => levels.Length;
 
-    public void GenerateLevel()
+    public void GenerateLevel(int levelIndex)
     {
         ClearLevel();
 
         walls.Clear();
         coins.Clear();
 
+        currentMapRows = levels[levelIndex];
+
         for (int row = 0; row < Height; row++)
         {
             for (int col = 0; col < Width; col++)
             {
-                char tile = mapRows[row][col];
+                char tile = currentMapRows[row][col];
                 Vector3 worldPos = GridToWorld(new Vector2Int(col, row));
 
                 Instantiate(floorPrefab, worldPos, Quaternion.identity, environmentParent);
@@ -61,10 +112,12 @@ public class GridGenerator : MonoBehaviour
                         Instantiate(wallPrefab, worldPos, Quaternion.identity, environmentParent);
                         walls[new Vector2Int(col, row)] = true;
                         break;
+
                     case 'C':
                         GameObject coin = Instantiate(coinPrefab, worldPos + Vector3.up * 0.5f, Quaternion.identity, coinsParent);
                         coins[new Vector2Int(col, row)] = coin;
                         break;
+
                     case 'P':
                         playerSpawnPoint = new Vector2Int(col, row);
                         break;
@@ -94,9 +147,9 @@ public class GridGenerator : MonoBehaviour
 
     public Vector3 GridToWorld(Vector2Int gridPos)
     {
-        return new Vector3 (
-            gridPos.x * tileSize, 
-            0f, 
+        return new Vector3(
+            gridPos.x * tileSize,
+            0f,
             -gridPos.y * tileSize
         );
     }
