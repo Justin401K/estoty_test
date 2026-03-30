@@ -16,13 +16,13 @@ public class GridGenerator : MonoBehaviour
     public Transform environmentParent;
     public Transform coinsParent;
 
-    public string[] mapRows =
+    private readonly string[] mapRows =
     {
         "WWWWWWWW",
         "WPFFFCFW",
-        "WFWFWFFW",
+        "WFWFWWFW",
         "WFCFFWFW",
-        "WFFWFFCW",
+        "WFWWFFCW",
         "WFWFFWFW",
         "WCFFFFFW",
         "WWWWWWWW"
