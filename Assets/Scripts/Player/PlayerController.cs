@@ -41,11 +41,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
-            return Vector2Int.up;
+            return Vector2Int.down;
         }
         if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            return Vector2Int.down;
+            return Vector2Int.up;
         }
         if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -83,6 +83,8 @@ public class PlayerController : MonoBehaviour
         Vector3 startPos = transform.position;
         Vector3 endPos = grid.GridToWorld(targetGridPos);
 
+        RotateToDirection(direction);
+
         if (animator != null)
         {
             animator.SetBool("IsWalking", true);
@@ -115,11 +117,11 @@ public class PlayerController : MonoBehaviour
     {
         if (direction == Vector2Int.up)
         {
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
         else if (direction == Vector2Int.down)
         {
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
         else if (direction == Vector2Int.left)
         {

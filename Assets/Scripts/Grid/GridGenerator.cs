@@ -79,7 +79,7 @@ public class GridGenerator : MonoBehaviour
         {
             for (int i = environmentParent.childCount - 1; i >= 0; i--)
             {
-                DestroyImmediate(environmentParent.GetChild(i).gameObject);
+                Destroy(environmentParent.GetChild(i).gameObject);
             }
         }
 
@@ -87,7 +87,7 @@ public class GridGenerator : MonoBehaviour
         {
             for (int i = coinsParent.childCount - 1; i >= 0; i--)
             {
-                DestroyImmediate(coinsParent.GetChild(i).gameObject);
+                Destroy(coinsParent.GetChild(i).gameObject);
             }
         }
     }

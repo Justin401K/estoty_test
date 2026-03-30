@@ -4,6 +4,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("References")]
     public GridGenerator gridGenerator;
+    public UIManager uiManager;
 
     private PlayerController player;
     private int totalCoins;
@@ -35,7 +36,10 @@ public class GameManager : MonoBehaviour
             player = playerObj.GetComponent<PlayerController>();
         }
 
-        player.Initialize(gridGenerator, this, gridGenerator.PlayerSpawnPoint);   
+        player.Initialize(gridGenerator, this, gridGenerator.PlayerSpawnPoint);
+
+        uiManager.SetCoinText(collectedCoins, totalCoins);
+        uiManager.ShowWinMessage(false);
     }
 
     public void HandlePlayerSteppedOnTile(Vector2Int gridPos)
@@ -45,9 +49,12 @@ public class GameManager : MonoBehaviour
             gridGenerator.CollectCoin(gridPos);
             collectedCoins++;
 
+            uiManager.SetCoinText(collectedCoins, totalCoins);
+
             if (collectedCoins == totalCoins)
             {
                 IsGameWon = true;
+                uiManager.ShowWinMessage(true);
             }
         }
     }
